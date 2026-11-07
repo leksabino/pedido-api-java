@@ -50,7 +50,7 @@
 
 # Criar pedido: POST /pedidos com {"cliente":"Alex","itens":\[{"produtoId":1,"quantidade":2}]}
 
-# Retorno esperado: "total": 51.8
+# Retorno esperado: "total": 51.80
 
 # Listar pedidos: GET /pedidos
 
