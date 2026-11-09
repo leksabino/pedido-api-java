@@ -1,68 +1,61 @@
-# \# Pedido API Java
+# Pedido API Java
 
-# 
+API REST para pedidos de restaurante. É a versão em Java do meu projeto [pedido-cli](https://github.com/leksabino/pedido-cli), agora com Spring Boot, JPA e validação.
 
-# API REST para pedidos de restaurante. Versao Java do meu projeto `pedido-cli` em Python, agora com Spring Boot, JPA e validacao.
+## O que faz
 
-# 
+- Cadastra produtos
+- Cria pedidos com cálculo automático do total
+- Valida os dados de entrada
+- Lista produtos e pedidos
 
-# \## O que faz
+## Stack
 
-# \- Cadastra produtos
+- Java 21
+- Spring Boot 3.4.1 (Web, Data JPA, Validation)
+- H2 (banco em memória)
+- Maven e JUnit
 
-# \- Cria pedidos com cálculo automatico do total
+## Como rodar
 
-# \- Valida dados de entrada
+```bash
+./mvnw spring-boot:run
+```
 
-# \- Lista produtos e pedidos
+A API sobe em `http://localhost:8080`.
 
-# 
+## Endpoints
 
-# \## Stack
+| Método | Rota | Descrição |
+|---|---|---|
+| POST | `/produtos` | Cria um produto |
+| GET | `/produtos` | Lista os produtos |
+| POST | `/pedidos` | Cria um pedido |
+| GET | `/pedidos` | Lista os pedidos |
 
-# \- Java 21
+Exemplo de produto:
 
-# \- Spring Boot 3.4.1
+```json
+{"nome": "X-Burger", "preco": 25.90}
+```
 
-# \- Spring Web, Spring Data JPA, Validation
+Exemplo de pedido (supondo que o produto de id 1 seja o X-Burger):
 
-# \- H2 (banco em memoria)
+```json
+{"cliente": "Maria", "itens": [{"produtoId": 1, "quantidade": 2}]}
+```
 
-# \- Maven, JUnit
+O total retornado é `51.80`.
 
-# 
+## Regras de negócio
 
-# \## Como rodar
+- Total = soma de preço × quantidade
+- O valor é calculado com `BigDecimal`, para evitar erro de arredondamento em dinheiro
+- Produto precisa de nome e de preço maior que zero
+- Pedido precisa de cliente e de pelo menos 1 item
+- Status do pedido: RECEBIDO, PREPARANDO, PRONTO, ENTREGUE, CANCELADO
 
-# ./mvnw spring-boot:run
+## Limitações
 
-# 
-
-# A API sobe em http://localhost:8080
-
-# 
-
-# \## Endpoints
-
-# Criar produto: POST /produtos com {"nome":"X-Burger","preco":25.90}
-
-# Listar produtos: GET /produtos
-
-# Criar pedido: POST /pedidos com {"cliente":"Alex","itens":\[{"produtoId":1,"quantidade":2}]}
-
-# Retorno esperado: "total": 51.80
-
-# Listar pedidos: GET /pedidos
-
-# 
-
-# \## Regras de negocio
-
-# \- Total = soma de preco \* quantidade
-
-# \- Produto precisa de nome e preco maior que zero
-
-# \- Pedido precisa de cliente e pelo menos 1 item
-
-# \- Status: RECEBIDO, PREPARANDO, PRONTO, ENTREGUE, CANCELADO
-
+- O banco H2 fica em memória: os dados se perdem quando a aplicação para.
+- Não há autenticação.
